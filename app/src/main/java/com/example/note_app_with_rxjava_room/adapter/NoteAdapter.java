@@ -49,7 +49,9 @@ public class NoteAdapter extends ListAdapter<Note, NoteAdapter.NoteViewHolder> {
             holder.bindData(note);
         }
     }
-
+    public Note getNote(int position){
+        return getItem(position);
+    }
     public static class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final NoteItemBinding binding;
         private final OnNoteClickListener onNoteClickListener;

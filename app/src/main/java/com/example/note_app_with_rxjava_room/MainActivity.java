@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.note_app_with_rxjava_room.adapter.NoteAdapter;
 import com.example.note_app_with_rxjava_room.clickListeners.OnNoteClickListener;
@@ -47,6 +50,25 @@ public class MainActivity extends AppCompatActivity implements OnNoteClickListen
         binding.notesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.notesRecyclerView.setHasFixedSize(true);
         binding.notesRecyclerView.setAdapter(noteAdapter);
+        addSwipeToDelete();
+    }
+
+    private void addSwipeToDelete() {
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    noteViewModel.deleteNote(noteAdapter.getNote(position));
+                }
+            }
+        });
+        helper.attachToRecyclerView(binding.notesRecyclerView);
     }
 
     private void setAddNoteFab() {
