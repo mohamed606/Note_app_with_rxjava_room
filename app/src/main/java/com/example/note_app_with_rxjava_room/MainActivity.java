@@ -2,6 +2,8 @@ package com.example.note_app_with_rxjava_room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -85,5 +87,22 @@ public class MainActivity extends AppCompatActivity implements OnNoteClickListen
         Intent intent = new Intent(this, NoteDetailActivity.class);
         intent.putExtra("note", note);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.deleteAllNotes:
+                noteViewModel.deleteAllNotes();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
